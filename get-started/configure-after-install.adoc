@@ -1,0 +1,278 @@
+---
+sidebar: sidebar 
+permalink: get-started/configure-after-install.html 
+keywords: configure, installation, install, after, Astra Control Center, 
+summary: 환경에 따라 Astra Control Center를 설치한 후 추가 구성이 필요할 수 있습니다. 
+---
+= 설치 후 Astra Control Center를 구성합니다
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/get-started/
+
+
+[role="lead"]
+환경에 따라 Astra Control Center를 설치한 후 추가 구성이 필요할 수 있습니다.
+
+
+
+== 리소스 제한을 제거합니다
+
+일부 환경에서는 ResourceQuotas 및 LimitRanges 개체를 사용하여 네임스페이스의 리소스가 클러스터에서 사용 가능한 모든 CPU 및 메모리를 사용하지 못하도록 합니다. Astra Control Center는 최대 제한을 설정하지 않으므로 해당 리소스를 준수하지 않습니다. 이러한 방식으로 환경을 구성한 경우 Astra Control Center를 설치할 네임스페이스에서 해당 리소스를 제거해야 합니다.
+
+다음 단계를 사용하여 할당량 및 제한을 검색하고 제거할 수 있습니다. 이 예제에서 명령 출력은 명령 직후에 표시됩니다.
+
+.단계
+. 에서 리소스 할당량을 가져옵니다 `netapp-acc` (또는 사용자 지정 이름) 네임스페이스:
++
+[source, console]
+----
+kubectl get quota -n [netapp-acc or custom namespace]
+----
++
+응답:
+
++
+[listing]
+----
+NAME          AGE   REQUEST                                        LIMIT
+pods-high     16s   requests.cpu: 0/20, requests.memory: 0/100Gi   limits.cpu: 0/200, limits.memory: 0/1000Gi
+pods-low      15s   requests.cpu: 0/1, requests.memory: 0/1Gi      limits.cpu: 0/2, limits.memory: 0/2Gi
+pods-medium   16s   requests.cpu: 0/10, requests.memory: 0/20Gi    limits.cpu: 0/20, limits.memory: 0/200Gi
+----
+. 이름으로 모든 리소스 할당량 삭제:
++
+[source, console]
+----
+kubectl delete resourcequota pods-high -n [netapp-acc or custom namespace]
+----
++
+[source, console]
+----
+kubectl delete resourcequota pods-low -n [netapp-acc or custom namespace]
+----
++
+[source, console]
+----
+kubectl delete resourcequota pods-medium -n [netapp-acc or custom namespace]
+----
+. 에서 제한 범위를 가져옵니다 `netapp-acc` (또는 사용자 지정 이름) 네임스페이스:
++
+[source, console]
+----
+kubectl get limits -n [netapp-acc or custom namespace]
+----
++
+응답:
+
++
+[listing]
+----
+NAME              CREATED AT
+cpu-limit-range   2022-06-27T19:01:23Z
+----
+. 이름별로 제한 범위를 삭제합니다.
++
+[source, console]
+----
+kubectl delete limitrange cpu-limit-range -n [netapp-acc or custom namespace]
+----
+
+
+
+
+== 사용자 지정 TLS 인증서를 추가합니다
+
+Astra Control Center는 자체 서명된 TLS 인증서를 수신 컨트롤러 트래픽(특정 구성에만 해당)과 웹 브라우저를 통한 웹 UI 인증에 사용합니다. 기존의 자체 서명된 TLS 인증서를 제거하고 CA(인증 기관)에서 서명한 TLS 인증서로 바꿀 수 있습니다.
+
+[NOTE]
+====
+자체 서명된 기본 인증서는 다음 두 가지 연결 유형에 사용됩니다.
+
+* Astra Control Center 웹 UI에 대한 HTTPS 연결
+* 수신 컨트롤러 트래픽(에만 해당 `ingressType: "AccTraefik"` 속성이 에 설정되었습니다 `astra_control_center.yaml` Astra Control Center 설치 중 파일)
+
+
+기본 TLS 인증서를 교체하면 이러한 연결에 인증에 사용되는 인증서가 대체됩니다.
+
+====
+.시작하기 전에
+* Astra Control Center가 설치된 Kubernetes 클러스터
+* 실행할 클러스터의 명령 셸에 대한 관리 액세스 `kubectl` 명령
+* CA의 개인 키 및 인증서 파일
+
+
+
+
+=== 자체 서명된 인증서를 제거합니다
+
+기존의 자체 서명된 TLS 인증서를 제거합니다.
+
+. SSH를 사용하여 관리 사용자로 Astra Control Center를 호스팅하는 Kubernetes 클러스터에 로그인합니다.
+. 다음 명령을 사용하여 현재 인증서와 연결된 TLS 암호를 찾아 바꿉니다 `<ACC-deployment-namespace>` Astra Control Center 배포 네임스페이스 사용:
++
+[source, console]
+----
+kubectl get certificate -n <ACC-deployment-namespace>
+----
+. 다음 명령을 사용하여 현재 설치된 암호 및 인증서를 삭제합니다.
++
+[source, console]
+----
+kubectl delete cert cert-manager-certificates -n <ACC-deployment-namespace>
+----
++
+[source, console]
+----
+kubectl delete secret secure-testing-cert -n <ACC-deployment-namespace>
+----
+
+
+
+
+=== 명령줄을 사용하여 새 인증서를 추가합니다
+
+CA에서 서명한 새 TLS 인증서를 추가합니다.
+
+. 다음 명령을 사용하여 CA의 개인 키 및 인증서 파일로 새 TLS 암호를 만들고 대괄호 <>의 인수를 적절한 정보로 바꿉니다.
++
+[source, console]
+----
+kubectl create secret tls <secret-name> --key <private-key-filename> --cert <certificate-filename> -n <ACC-deployment-namespace>
+----
+. 다음 명령 및 예제를 사용하여 클러스터 CRD(Custom Resource Definition) 파일을 편집하고 를 변경합니다 `spec.selfSigned` 값을 로 설정합니다 `spec.ca.secretName` 앞에서 만든 TLS 암호를 확인하려면 다음을 수행하십시오.
++
+[source, console]
+----
+kubectl edit clusterissuers.cert-manager.io/cert-manager-certificates -n <ACC-deployment-namespace>
+----
++
+CRD:
+
++
+[listing]
+----
+#spec:
+#  selfSigned: {}
+
+spec:
+  ca:
+    secretName: <secret-name>
+----
+. 다음 명령 및 예제 출력을 사용하여 변경 사항이 올바른지, 클러스터가 인증서를 교체할 준비가 되었는지 확인합니다 `<ACC-deployment-namespace>` Astra Control Center 배포 네임스페이스 사용:
++
+[source, yaml]
+----
+kubectl describe clusterissuers.cert-manager.io/cert-manager-certificates -n <ACC-deployment-namespace>
+----
++
+응답:
+
++
+[listing]
+----
+Status:
+  Conditions:
+    Last Transition Time:  2021-07-01T23:50:27Z
+    Message:               Signing CA verified
+    Reason:                KeyPairVerified
+    Status:                True
+    Type:                  Ready
+Events:                    <none>
+----
+. 를 생성합니다 `certificate.yaml` 다음 예제를 사용하는 파일 대괄호 <>의 개체 틀 값을 적절한 정보로 바꿉니다.
++
+[source, yaml, subs="+quotes"]
+----
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  *name: <certificate-name>*
+  namespace: <ACC-deployment-namespace>
+spec:
+  *secretName: <certificate-secret-name>*
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  dnsNames:
+  *- <astra.dnsname.example.com>* #Replace with the correct Astra Control Center DNS address
+  issuerRef:
+    kind: ClusterIssuer
+    name: cert-manager-certificates
+----
+. 다음 명령을 사용하여 인증서를 생성합니다.
++
+[source, console]
+----
+kubectl apply -f certificate.yaml
+----
+. 다음 명령 및 예제 출력을 사용하여 인증서가 올바르게 만들어졌는지, 그리고 생성 중에 지정한 인수(예: 이름, 기간, 갱신 기한 및 DNS 이름)를 사용하여 확인합니다.
++
+[source, console]
+----
+kubectl describe certificate -n <ACC-deployment-namespace>
+----
++
+응답:
+
++
+[listing]
+----
+Spec:
+  Dns Names:
+    astra.example.com
+  Duration:  125h0m0s
+  Issuer Ref:
+    Kind:        ClusterIssuer
+    Name:        cert-manager-certificates
+  Renew Before:  61h0m0s
+  Secret Name:   <certificate-secret-name>
+Status:
+  Conditions:
+    Last Transition Time:  2021-07-02T00:45:41Z
+    Message:               Certificate is up to date and has not expired
+    Reason:                Ready
+    Status:                True
+    Type:                  Ready
+  Not After:               2021-07-07T05:45:41Z
+  Not Before:              2021-07-02T00:45:41Z
+  Renewal Time:            2021-07-04T16:45:41Z
+  Revision:                1
+Events:                    <none>
+----
+. TLS 편집 다음 명령 및 예제를 사용하여 새 인증서 암호 이름을 가리키도록 CRD를 저장합니다. 대괄호 <>의 개체 틀 값을 적절한 정보로 바꿉니다
++
+[listing]
+----
+kubectl edit tlsstores.traefik.io -n <ACC-deployment-namespace>
+----
++
+CRD:
+
++
+[listing]
+----
+...
+spec:
+  defaultCertificate:
+    secretName: <certificate-secret-name>
+----
+. 다음 명령 및 예제를 사용하여 새 인증서 암호를 가리키도록 수신 CRD TLS 옵션을 편집합니다. 대괄호 <>의 개체 틀 값을 적절한 정보로 바꿉니다.
++
+[listing]
+----
+kubectl edit ingressroutes.traefik.io -n <ACC-deployment-namespace>
+----
++
+CRD:
+
++
+[listing]
+----
+...
+ tls:
+    secretName: <certificate-secret-name>
+----
+. 웹 브라우저를 사용하여 Astra Control Center의 배포 IP 주소로 이동합니다.
+. 인증서 세부 정보가 설치한 인증서의 세부 정보와 일치하는지 확인합니다.
+. 인증서를 내보내고 결과를 웹 브라우저의 인증서 관리자로 가져옵니다.
+

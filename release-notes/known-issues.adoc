@@ -1,0 +1,125 @@
+---
+sidebar: sidebar 
+permalink: release-notes/known-issues.html 
+keywords: astra, control center, bugs, known issues, problems 
+summary: 알려진 문제점은 이 제품 릴리스를 성공적으로 사용하지 못하게 만들 수 있는 문제를 식별합니다. 
+---
+= 알려진 문제
+:hardbreaks:
+:allow-uri-read: 
+:source-highlighter: highlight.js
+:icons: font
+:imagesdir: ../media/release-notes/
+
+
+[role="lead"]
+알려진 문제점은 이 제품 릴리스를 성공적으로 사용하지 못하게 만들 수 있는 문제를 식별합니다.
+
+현재 릴리즈에는 다음과 같은 알려진 문제가 영향을 줍니다.
+
+* <<클러스터를 관리하고 볼륨을 추가한 경우 앱 백업 및 스냅숏이 실패합니다>>
+* <<kubecononfig 파일에 컨텍스트가 두 개 이상 포함되어 있으면 Astra Control Center를 사용하여 클러스터를 관리할 수 없습니다>>
+* <<Istio 환경에서는 모니터링 포드가 충돌할 수 있습니다>>
+* <<Astra Trident가 오프라인일 때 내부 서비스 오류(500)와 함께 앱 데이터 관리 작업이 실패했습니다>>
+* <<ONTAP의 데이터 이동 없이 복원 작업 - NAS 이코노미 스토리지 클래스에 장애가 발생했습니다>>
+* <<Kerberos 전송 중 암호화를 사용할 때 백업에서 복원하지 못할 수 있습니다>>
+* <<백업 데이터는 보존 정책이 만료된 버킷에 대해 삭제 후에도 버킷에 남아 있습니다>>
+
+
+
+
+== 클러스터를 관리하고 볼륨을 추가한 경우 앱 백업 및 스냅숏이 실패합니다
+
+와 함께 백업 및 스냅샷이 실패합니다 `UI 500 error` 이 시나리오에서. 이 문제를 해결하려면 앱 목록을 새로 고치십시오.
+
+
+
+== kubecononfig 파일에 컨텍스트가 두 개 이상 포함되어 있으면 Astra Control Center를 사용하여 클러스터를 관리할 수 없습니다
+
+2개 이상의 클러스터와 컨텍스트를 사용하여 kubeconfig를 사용할 수 없습니다. 를 참조하십시오 link:https://kb.netapp.com/Cloud/Astra/Control/Managing_cluster_with_Astra_Control_Center_may_fail_when_using_default_kubeconfig_file_contains_more_than_one_context["기술 자료 문서를 참조하십시오"^] 를 참조하십시오.
+
+
+
+== Istio 환경에서는 모니터링 포드가 충돌할 수 있습니다
+
+Istio 환경에서 Astra Control Center와 Cloud Insights를 페어링하는 경우, 를 참조하십시오 `telegraf-rs` POD가 충돌할 수 있습니다. 이 문제를 해결하려면 다음 단계를 수행하십시오.
+
+. 충돌한 포드 찾기:
++
+[listing]
+----
+kubectl -n netapp-monitoring get pod | grep Error
+----
++
+다음과 유사한 출력이 표시됩니다.
+
++
+[listing]
+----
+NAME READY STATUS RESTARTS AGE
+telegraf-rs-fhhrh 1/2 Error 2 (26s ago) 32s
+----
+. 충돌한 포드를 다시 시작하여 교체합니다 `<pod_name_from_output>` 영향을 받는 POD 이름 사용:
++
+[listing]
+----
+kubectl -n netapp-monitoring delete pod <pod_name_from_output>
+----
++
+다음과 유사한 출력이 표시됩니다.
+
++
+[listing]
+----
+pod "telegraf-rs-fhhrh" deleted
+----
+. 포드가 다시 시작되었으며 오류 상태가 아닌지 확인합니다.
++
+[listing]
+----
+kubectl -n netapp-monitoring get pod
+----
++
+다음과 유사한 출력이 표시됩니다.
+
++
+[listing]
+----
+NAME READY STATUS RESTARTS AGE
+telegraf-rs-rrnsb 2/2 Running 0 11s
+----
+
+
+
+
+== Astra Trident가 오프라인일 때 내부 서비스 오류(500)와 함께 앱 데이터 관리 작업이 실패했습니다
+
+앱 클러스터의 Astra Trident가 오프라인 상태가 되고 다시 온라인 상태가 되고 앱 데이터 관리를 시도할 때 500 내부 서비스 오류가 발생하는 경우, 앱 클러스터의 모든 Kubernetes 노드를 다시 시작하여 기능을 복원합니다.
+
+
+
+== ONTAP의 데이터 이동 없이 복원 작업 - NAS 이코노미 스토리지 클래스에 장애가 발생했습니다
+
+응용 프로그램의 전체 복원을 수행하고(응용 프로그램을 원래 네임스페이스로 복원) 앱의 저장소 클래스는 을 사용합니다 `ontap-nas-economy` 드라이버, 스냅샷 디렉토리가 숨겨져 있지 않으면 복구 작업이 실패할 수 있습니다. 원래 위치로 복원하기 전에 의 지침을 따릅니다 link:../use/protect-apps.html#enable-backup-and-restore-for-ontap-nas-economy-operations["ONTAP - NAS - 경제성 작업을 위한 백업 및 복원 지원"^] 스냅샷 디렉토리를 숨깁니다.
+
+
+
+== Kerberos 전송 중 암호화를 사용할 때 백업에서 복원하지 못할 수 있습니다
+
+백업에서 Kerberos 전송 중 암호화를 사용하는 스토리지 백엔드로 응용 프로그램을 복원하면 복원 작업이 실패할 수 있습니다. 이 문제는 스냅샷에서 복원하거나 NetApp SnapMirror를 사용하여 애플리케이션 데이터를 복제하는 데는 영향을 주지 않습니다.
+
+
+NOTE: NFSv4 볼륨에서 Kerberos 전송 중 암호화를 사용하는 경우 NFSv4 볼륨에서 올바른 설정을 사용하고 있는지 확인하십시오. 의 NetApp NFSv4 도메인 구성 섹션(13페이지)을 참조하십시오 https://www.netapp.com/media/16398-tr-3580.pdf["NetApp NFSv4의 향상된 기능 및 모범 사례 가이드 를 참조하십시오"^].
+
+
+
+== 백업 데이터는 보존 정책이 만료된 버킷에 대해 삭제 후에도 버킷에 남아 있습니다
+
+버킷의 보존 정책이 만료된 후 앱의 변경 불가능한 백업을 삭제하면 Astra Control에서 백업이 삭제되지만 버킷에서는 삭제되지 않습니다. 이 문제는 다음 릴리스에서 해결될 예정입니다.
+
+
+
+== 자세한 내용을 확인하십시오
+
+* link:../release-notes/known-limitations.html["알려진 제한 사항"]
+

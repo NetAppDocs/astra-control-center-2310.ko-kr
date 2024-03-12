@@ -1,0 +1,28 @@
+---
+section: get-started
+title: 시작하십시오
+entries:
+- title: Astra Control Center에 대해 자세히 알아보십시오
+  url: "/get-started/intro.html"
+- title: Astra Control Center 요구 사항
+  url: "/get-started/requirements.html"
+- title: Astra Control Center를 빠르게 시작합니다
+  url: "/get-started/quick-start.html"
+- title: 설치 개요
+  url: "/get-started/install_overview.html"
+  entries:
+  - title: Astra Control Center를 설치합니다
+    url: "/get-started/install_acc.html"
+    entries:
+    - title: 외부 인증서 관리자를 구성합니다
+      url: "/get-started/cert-manager-prereqs.html"
+  - title: OpenShift OperatorHub를 사용하여 Astra Control Center를 설치합니다
+    url: "/get-started/acc_operatorhub_install.html"
+  - title: Cloud Volumes ONTAP 스토리지 백엔드를 사용하여 Astra Control Center를 설치합니다
+    url: "/get-started/install_acc-cvo.html"
+  - title: 설치 후 Astra Control Center를 구성합니다
+    url: "/get-started/configure-after-install.html"
+- title: Astra Control Center를 설정합니다
+  url: "/get-started/setup_overview.html"
+- title: FAQ 를 참조하십시오
+  url: "/get-started/faq.html"

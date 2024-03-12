@@ -1,0 +1,207 @@
+---
+sidebar: sidebar 
+permalink: use/uninstall_acc.html 
+keywords: astra, astra control center, uninstall, remove 
+summary: Astra Control Center 및 Astra Control Center 운영자를 제거하는 방법에 대해 설명합니다. 
+---
+= Astra Control Center를 제거합니다
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/get-started/
+
+
+[role="lead"]
+평가판을 정식 버전으로 업그레이드하는 경우 Astra Control Center 구성 요소를 제거해야 할 수 있습니다. Astra Control Center 및 Astra Control Center 운영자를 제거하려면 이 절차에 설명된 명령을 순서대로 실행하십시오.
+
+설치 제거에 문제가 있는 경우 를 참조하십시오 <<제거 문제 해결>>.
+
+.시작하기 전에
+. link:../use/unmanage.html#unmanage-an-app["모든 앱 관리를 취소합니다"^] 클러스터에서.
+. link:../use/unmanage.html#unmanage-a-cluster["모든 클러스터의 관리를 취소합니다"^].
+
+
+.단계
+. Astra Control Center를 삭제합니다. 다음 샘플 명령은 기본 설치를 기반으로 합니다. 사용자 정의 설정을 만든 경우 명령을 수정합니다.
++
+[listing]
+----
+kubectl delete -f astra_control_center.yaml -n netapp-acc
+----
++
+결과:
+
++
+[listing]
+----
+astracontrolcenter.astra.netapp.io "astra" deleted
+----
+. 다음 명령을 사용하여 를 삭제합니다 `netapp-acc` (또는 사용자 지정 이름) 네임스페이스:
++
+[listing]
+----
+kubectl delete ns [netapp-acc or custom namespace]
+----
++
+예제 결과:
+
++
+[listing]
+----
+namespace "netapp-acc" deleted
+----
+. 다음 명령을 사용하여 Astra Control Center 운영자 시스템 구성 요소를 삭제합니다.
++
+[listing]
+----
+kubectl delete -f astra_control_center_operator_deploy.yaml
+----
++
+결과:
+
++
+[listing]
+----
+namespace/netapp-acc-operator deleted
+customresourcedefinition.apiextensions.k8s.io/astracontrolcenters.astra.netapp.io deleted
+role.rbac.authorization.k8s.io/acc-operator-leader-election-role deleted
+clusterrole.rbac.authorization.k8s.io/acc-operator-manager-role deleted
+clusterrole.rbac.authorization.k8s.io/acc-operator-metrics-reader deleted
+clusterrole.rbac.authorization.k8s.io/acc-operator-proxy-role deleted
+rolebinding.rbac.authorization.k8s.io/acc-operator-leader-election-rolebinding deleted
+clusterrolebinding.rbac.authorization.k8s.io/acc-operator-manager-rolebinding deleted
+clusterrolebinding.rbac.authorization.k8s.io/acc-operator-proxy-rolebinding deleted
+configmap/acc-operator-manager-config deleted
+service/acc-operator-controller-manager-metrics-service deleted
+deployment.apps/acc-operator-controller-manager deleted
+----
+
+
+
+
+== 제거 문제 해결
+
+다음 해결 방법을 사용하여 Astra Control Center를 제거할 때 발생하는 문제를 해결하십시오.
+
+
+
+=== Astra Control Center를 제거해도 관리 클러스터의 모니터링 운영자 포드가 정리되지 않습니다
+
+Astra Control Center를 제거하기 전에 클러스터를 관리하지 않았다면 NetApp 모니터링 네임스페이스 및 네임스페이스에서 Pod를 수동으로 삭제할 수 있습니다. 이러한 명령은 다음과 같습니다.
+
+.단계
+. 삭제 `acc-monitoring` 에이전트:
++
+[listing]
+----
+kubectl delete agents acc-monitoring -n netapp-monitoring
+----
++
+결과:
+
++
+[listing]
+----
+agent.monitoring.netapp.com "acc-monitoring" deleted
+----
+. 네임스페이스 삭제:
++
+[listing]
+----
+kubectl delete ns netapp-monitoring
+----
++
+결과:
+
++
+[listing]
+----
+namespace "netapp-monitoring" deleted
+----
+. 제거된 리소스 확인:
++
+[listing]
+----
+kubectl get pods -n netapp-monitoring
+----
++
+결과:
+
++
+[listing]
+----
+No resources found in netapp-monitoring namespace.
+----
+. 모니터링 에이전트 제거 확인:
++
+[listing]
+----
+kubectl get crd|grep agent
+----
++
+샘플 결과:
+
++
+[listing]
+----
+agents.monitoring.netapp.com                     2021-07-21T06:08:13Z
+----
+. 사용자 정의 리소스 정의(CRD) 정보 삭제:
++
+[listing]
+----
+kubectl delete crds agents.monitoring.netapp.com
+----
++
+결과:
+
++
+[listing]
+----
+customresourcedefinition.apiextensions.k8s.io "agents.monitoring.netapp.com" deleted
+----
+
+
+
+
+=== Astra Control Center를 제거해도 Traefik CRD가 정리되지 않습니다
+
+Traefik CRD를 수동으로 삭제할 수 있습니다. CRD는 글로벌 리소스이며 CRD를 삭제하면 클러스터의 다른 애플리케이션에 영향을 줄 수 있습니다.
+
+.단계
+. 클러스터에 설치된 Traefik CRD 나열:
++
+[listing]
+----
+kubectl get crds |grep -E 'traefik'
+----
++
+응답
+
++
+[listing]
+----
+ingressroutes.traefik.containo.us             2021-06-23T23:29:11Z
+ingressroutetcps.traefik.containo.us          2021-06-23T23:29:11Z
+ingressrouteudps.traefik.containo.us          2021-06-23T23:29:12Z
+middlewares.traefik.containo.us               2021-06-23T23:29:12Z
+middlewaretcps.traefik.containo.us            2021-06-23T23:29:12Z
+serverstransports.traefik.containo.us         2021-06-23T23:29:13Z
+tlsoptions.traefik.containo.us                2021-06-23T23:29:13Z
+tlsstores.traefik.containo.us                 2021-06-23T23:29:14Z
+traefikservices.traefik.containo.us           2021-06-23T23:29:15Z
+----
+. CRD 삭제:
++
+[listing]
+----
+kubectl delete crd ingressroutes.traefik.containo.us ingressroutetcps.traefik.containo.us ingressrouteudps.traefik.containo.us middlewares.traefik.containo.us serverstransports.traefik.containo.us tlsoptions.traefik.containo.us tlsstores.traefik.containo.us traefikservices.traefik.containo.us middlewaretcps.traefik.containo.us
+----
+
+
+
+
+== 자세한 내용을 확인하십시오
+
+* link:../release-notes/known-issues.html["제거 관련 알려진 문제입니다"]
+

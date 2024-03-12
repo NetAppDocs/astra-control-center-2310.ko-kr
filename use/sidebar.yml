@@ -1,0 +1,62 @@
+---
+section: use
+title: Astra Control Center를 사용합니다
+entries:
+- title: 앱 관리를 시작합니다
+  url: "/use/manage-apps.html"
+- title: 앱 보호
+  entries:
+  - title: 보호 개요
+    url: "/use/protection-overview.html"
+  - title: 앱 보호
+    url: "/use/protect-apps.html"
+  - title: 앱 복원
+    url: "/use/restore-apps.html"
+  - title: 스토리지 백엔드 간에 앱을 복제합니다
+    url: "/use/replicate_snapmirror.html"
+  - title: 애플리케이션 클론 복제 및 마이그레이션
+    url: "/use/clone-apps.html"
+  - title: 앱 실행 후크 관리
+    url: "/use/execution-hooks.html"
+  - title: Astra Control Center를 사용하여 Astra Control Center를 보호합니다
+    url: "/use/protect-acc-with-acc.html"
+- title: 앱 및 클러스터 상태를 모니터링합니다
+  entries:
+  - title: 대시보드 요약
+    url: "/use/view-dashboard.html"
+  - title: 클러스터 상태 및 세부 정보
+    url: "/use/view-clusters.html"
+  - title: 앱 상태 및 세부 정보
+    url: "/use/view-apps.html"
+- title: 계정을 관리합니다
+  entries:
+  - title: 로컬 사용자 및 역할 관리
+    url: "/use/manage-local-users-and-roles.html"
+  - title: 원격 인증을 관리합니다
+    url: "/use/manage-remote-authentication.html"
+  - title: 원격 사용자 및 그룹 관리
+    url: "/use/manage-remote-users-groups.html"
+  - title: 알림을 관리합니다
+    url: "/use/manage-notifications.html"
+  - title: 자격 증명 관리
+    url: "/use/manage-credentials.html"
+  - title: 계정 활동을 모니터링합니다
+    url: "/use/view-account-activity.html"
+  - title: 기존 라이센스를 업데이트합니다
+    url: "/use/update-licenses.html"
+- title: 버킷을 관리합니다
+  url: "/use/manage-buckets.html"
+- title: 스토리지 백엔드를 관리합니다
+  url: "/use/manage-backend.html"
+- title: 실행 중인 작업을 모니터링합니다
+  url: "/use/monitor-running-tasks.html"
+- title: Cloud Insights 및 Fluentd로 인프라 모니터링
+  url: "/use/monitor-protect.html"
+- title: 앱 및 클러스터 관리를 취소합니다
+  url: "/use/unmanage.html"
+- title: Astra Control Center를 업그레이드합니다
+  url: "/use/upgrade-acc.html"
+- title: Astra Control Provisioner를 활성화합니다
+  url: "/use/enable-acp.html"
+- title: Astra Control Center를 제거합니다
+  url: "/use/uninstall_acc.html"

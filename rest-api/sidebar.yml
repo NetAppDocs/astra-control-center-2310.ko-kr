@@ -1,0 +1,6 @@
+---
+section: rest-api
+title: Astra Control REST API로 자동화
+entries:
+- title: 소개
+  url: "/rest-api/api-intro.html"

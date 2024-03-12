@@ -1,0 +1,162 @@
+---
+sidebar: sidebar 
+permalink: use/manage-buckets.html 
+keywords: how to set up object storage in astra, how to set up astra buckets, s3, astra, setting up astra control, astra control center, kubernetes 
+summary: 애플리케이션과 영구 스토리지를 백업하려는 경우나 클러스터 간에 애플리케이션을 클론 복제하려는 경우에는 오브젝트 저장소 버킷 공급자를 추가하는 것이 중요합니다. 
+---
+= 버킷을 관리합니다
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/use/
+
+
+[role="lead"]
+애플리케이션 및 영구 스토리지를 백업하려는 경우나 클러스터 간에 애플리케이션을 클론 복제하려는 경우에는 오브젝트 저장소 버킷 공급자가 필수적입니다. Astra Control Center를 사용하여 객체 저장소 공급자를 오프라인 클러스터, 앱의 백업 대상으로 추가합니다.
+
+애플리케이션 구성과 영구 스토리지를 동일한 클러스터에 클론 복제할 경우 버킷이 필요하지 않습니다.
+
+다음 Amazon S3(Simple Storage Service) 버킷 공급자 중 하나를 사용하십시오.
+
+* NetApp ONTAP S3
+* NetApp StorageGRID S3
+* Microsoft Azure를 참조하십시오
+* 일반 S3
++
+
+NOTE: AWS(Amazon Web Services) 및 GCP(Google Cloud Platform)는 일반 S3 버킷 유형을 사용합니다.
+
++
+
+NOTE: Astra Control Center는 Amazon S3를 일반 S3 버킷 공급자로 지원하지만, Astra Control Center는 Amazon의 S3 지원을 주장하는 모든 오브젝트 저장소 공급업체를 지원하지 않을 수 있습니다.
+
+
+
+버킷은 다음 상태 중 하나일 수 있습니다.
+
+* 보류 중: 버킷이 검색되도록 예약되었습니다.
+* 사용 가능: 버킷을 사용할 수 있습니다.
+* 제거: 현재 버킷에 접근할 수 없습니다.
+
+
+Astra Control API를 사용하여 버킷을 관리하는 방법에 대한 지침은 을 참조하십시오 link:https://docs.netapp.com/us-en/astra-automation/["Astra 자동화 및 API 정보"^].
+
+버킷 관리와 관련된 다음 작업을 수행할 수 있습니다.
+
+* link:../get-started/setup_overview.html#add-a-bucket["버킷을 추가합니다"]
+* <<버킷을 편집합니다>>
+* <<기본 버킷을 설정합니다>>
+* <<버킷 자격 증명을 회전하거나 제거합니다>>
+* <<버킷을 탈거하십시오>>
+
+
+
+NOTE: Astra Control Center의 S3 버킷은 가용 용량을 보고하지 않습니다. Astra Control Center에서 관리하는 앱을 백업 또는 클론 생성하기 전에 ONTAP 또는 StorageGRID 관리 시스템에서 버킷 정보를 확인하십시오.
+
+
+
+== 버킷을 편집합니다
+
+버킷의 액세스 자격 증명 정보를 변경하고 선택한 버킷이 기본 버킷인지 여부를 변경할 수 있습니다.
+
+
+NOTE: 버킷을 추가할 때 올바른 버킷 공급자를 선택하고 해당 공급자에 적합한 자격 증명을 제공합니다. 예를 들어, UI에서 NetApp ONTAP S3를 유형으로 받아들이고 StorageGRID 자격 증명을 받아들이지만, 이 버킷을 사용한 이후의 모든 애플리케이션 백업 및 복원이 실패합니다. 를 참조하십시오 link:../release-notes/known-issues.html#selecting-a-bucket-provider-type-with-credentials-for-another-type-causes-data-protection-failures["릴리즈 노트"].
+
+.단계
+. 왼쪽 탐색 창에서 * Bucket * 을 선택합니다.
+. Actions * 열의 메뉴에서 * Edit * 를 선택합니다.
+. 버킷 유형 이외의 모든 정보를 변경합니다.
++
+
+TIP: 버킷 유형을 수정할 수 없습니다.
+
+. Update * 를 선택합니다.
+
+
+
+
+== 기본 버킷을 설정합니다
+
+클러스터 간에 클론을 수행할 경우 Astra Control에 기본 버킷이 필요합니다. 다음 단계에 따라 모든 클러스터의 기본 버킷을 설정합니다.
+
+.단계
+. 클라우드 인스턴스 * 로 이동합니다.
+. 목록에서 클라우드 인스턴스의 * 작업 * 열에 있는 메뉴를 선택합니다.
+. 편집 * 을 선택합니다.
+. Bucket * 목록에서 기본값으로 사용할 버킷을 선택합니다.
+. 저장 * 을 선택합니다.
+
+
+
+
+== 버킷 자격 증명을 회전하거나 제거합니다
+
+Astra Control은 버킷 자격 증명을 사용하여 액세스 권한을 얻고 S3 버킷에 대한 비밀 키를 제공하여 Astra Control Center가 버킷과 통신할 수 있도록 합니다.
+
+
+
+=== 버킷 자격 증명을 회전합니다
+
+자격 증명을 회전하는 경우 백업이 진행 중인 상태(예약 또는 필요 시)가 없을 때 유지 관리 창에서 자격 증명을 회전합니다.
+
+.자격 증명을 편집하고 회전하는 단계입니다
+. 왼쪽 탐색 창에서 * Bucket * 을 선택합니다.
+. Actions * 열의 Options 메뉴에서 * Edit * 를 선택합니다.
+. 새 자격 증명을 생성합니다.
+. Update * 를 선택합니다.
+
+
+
+
+=== 버킷 자격 증명을 제거합니다
+
+버킷에 새 자격 증명이 적용된 경우 또는 버킷이 더 이상 사용되지 않는 경우에만 버킷 자격 증명을 제거해야 합니다.
+
+
+TIP: Astra Control에 추가하는 첫 번째 자격 증명 세트는 항상 사용 중입니다. Astra Control은 자격 증명을 사용하여 백업 버킷을 인증하기 때문입니다. 버킷이 사용 중인 경우 이러한 자격 증명을 제거하지 마십시오. 이 경우 백업 실패 및 백업 가용성 손실이 발생할 수 있습니다.
+
+
+NOTE: 활성 버킷 자격 증명을 제거하는 경우 를 참조하십시오 https://kb.netapp.com/Cloud/Astra/Control/Deleting_active_S3_bucket_credentials_leads_to_spurious_500_errors_reported_in_the_UI["버킷 자격 증명 제거 문제 해결"].
+
+Astra Control API를 사용하여 S3 자격 증명을 제거하는 방법에 대한 지침은 을 참조하십시오 link:https://docs.netapp.com/us-en/astra-automation/["Astra 자동화 및 API 정보"^].
+
+
+
+== 버킷을 탈거하십시오
+
+더 이상 사용하지 않거나 상태가 불량한 버킷을 제거할 수 있습니다. 오브젝트 저장소 구성을 단순하고 최신 상태로 유지하기 위해 이 작업을 수행할 수 있습니다.
+
+[NOTE]
+====
+* 기본 버킷을 제거할 수 없습니다. 해당 버킷을 제거하려면 먼저 다른 버킷을 기본값으로 선택하십시오.
+* 버킷의 클라우드 공급자 보존 기간이 만료되기 전에는 WORM(Write Once Read Many) 버킷을 제거할 수 없습니다. 웜 버킷은 버킷 이름 옆에 "잠김"으로 표시됩니다.
+
+
+====
+* 기본 버킷을 제거할 수 없습니다. 해당 버킷을 제거하려면 먼저 다른 버킷을 기본값으로 선택하십시오.
+
+
+.시작하기 전에
+* 시작하기 전에 이 버킷에 대해 실행 중이거나 완료된 백업이 없는지 확인해야 합니다.
+* 버킷이 활성 보호 정책에서 사용되고 있지 않은지 확인해야 합니다.
+
+
+있는 경우 계속할 수 없습니다.
+
+.단계
+. 왼쪽 탐색에서 * Bucket * 을 선택합니다.
+. Actions * 메뉴에서 * Remove * 를 선택합니다.
++
+
+NOTE: Astra Control은 먼저 버킷에 백업을 사용하는 스케줄 정책이 없고 제거할 버킷에 활성 백업이 없음을 보장합니다.
+
+. 작업을 확인하려면 "remove"를 입력합니다.
+. 예, 버킷 제거 * 를 선택합니다.
+
+
+
+
+== 자세한 내용을 확인하십시오
+
+* https://docs.netapp.com/us-en/astra-automation["Astra Control API를 사용합니다"^]
+
