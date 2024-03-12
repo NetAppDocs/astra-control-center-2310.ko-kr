@@ -487,6 +487,18 @@ spec:
   accountName: "Example"
   *astraVersion: "[Version number]"*
 ----
+. Astra 버전 번호를 변경합니다 (`astraVersion` 의 내부 `spec`)에서 시작합니다 `23.07.0` 를 선택합니다 `23.10.0`:
++
+
+NOTE: 현재 릴리스 뒤에 있는 두 개 이상의 릴리스에서는 직접 업그레이드할 수 없습니다. 릴리스 버전의 전체 목록은 를 참조하십시오 link:../release-notes/whats-new.html["릴리즈 노트를 참조하십시오"].
+
++
+[listing, subs="+quotes"]
+----
+spec:
+  accountName: "Example"
+  *astraVersion: "[Version number]"*
+----
 . 이미지 레지스트리 경로가 에서 이미지를 푸시한 레지스트리 경로와 일치하는지 확인합니다 <<이미지를 로컬 레지스트리에 추가합니다,이전 단계>>. 업데이트 `imageRegistry` 의 내부 `spec` 마지막 설치 이후 레지스트리가 변경된 경우
 +
 [listing]
