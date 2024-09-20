@@ -78,7 +78,6 @@
   <block id="35f3a2f7a0f2c01d03afedb95ece66ab" category="inline-link">NetApp 인증된 파일 업로드(로그인 필요)</block>
   <block id="1c2989d4329c8aeec5e01506816fb04e" category="list-text">사용<block ref="4b0bc63f683ccbf4dcf0ba2a6a1b561f" category="inline-link-rx"></block>.</block>
   <block id="94bcffc8ff8a109a8267202d2aaa5526" category="list-text">NSS에서 케이스에 번들을 직접 부착합니다.</block>
-  <block id="4345f2150d39e38a6a11ee7ee57bed28" category="list-text">NetApp Active IQ 사용</block>
   <block id="5220375a520b7758aa31b8b43ce717fe" category="summary">Astra Control Provisioner는 소스 볼륨과 타겟 볼륨 간의 미러 관계 생성을 지원하여 재해 복구를 위해 볼륨을 복제할 수 있도록 합니다.</block>
   <block id="50e2eea9ba53d70147772db1c5d25f79" category="doc">SnapMirror를 사용하여 볼륨을 복제합니다</block>
   <block id="d0182feabbbe0987e5c6aed407b4c2a7" category="paragraph">Astra Control Provisioner를 사용하면 재해 복구를 위한 데이터 복제를 위해 한 클러스터의 소스 볼륨과 피어링된 클러스터의 타겟 볼륨 간에 미러 관계를 생성할 수 있습니다. 이름이 지정된 CRD(사용자 지정 리소스 정의)를 사용하여 다음 작업을 수행할 수 있습니다.</block>
@@ -395,7 +394,6 @@ NetApp 이미지 레지스트리에서 Astra Control Provisioner와 같은 Astra
   <block id="90d397f2aa31c2e6d9f5dfda5d12adca" category="paragraph">Astra Control Center는 프라이빗 클라우드에서 로컬로 실행됩니다.</block>
   <block id="95936e8fb1e1f6bf4c0671f4ccc84fe7" category="paragraph">Astra Control Center는 ONTAP 9.5 이상의 스토리지 백엔드가 있는 Astra Trident 기반 스토리지 클래스를 통해 Kubernetes 클러스터를 지원합니다.</block>
   <block id="51269e2584d26b04961877ec77db6da7" category="paragraph">클라우드 연결 환경에서 Astra Control Center는 Cloud Insights를 사용하여 고급 모니터링 및 원격 측정 기능을 제공합니다. Cloud Insights 연결이 없을 경우 Astra Control Center에서 제한된(7일 메트릭) 모니터링 및 원격 측정 기능을 사용할 수 있으며, 개방형 메트릭 엔드 포인트를 통해 Kubernetes 기본 모니터링 툴(예: Prometheus 및 Grafana)으로 내보낼 수 있습니다.</block>
-  <block id="ea2708b459fc0cad6936ec216bd9405e" category="paragraph">Astra Control Center는 AutoSupport 및 Active IQ 에코시스템에 완전히 통합되어 사용자와 NetApp 지원에 문제 해결 및 사용 정보를 제공합니다.</block>
   <block id="e4a6d61b6602f5e6d6468645b096f45e" category="paragraph">90일 임베디드 평가판 라이센스를 사용하여 Astra Control Center를 사용해 볼 수 있습니다. Astra Control Center를 평가하는 동안 이메일과 커뮤니티 옵션을 통해 지원을 받을 수 있습니다. 또한 제품 내 지원 대시보드에서 Knowledgebase 문서 및 문서에 액세스할 수 있습니다.</block>
   <block id="b4851e92b19af0c5c82447fc0937709d" category="inline-link">요구 사항</block>
   <block id="ebd65e27e034512530c808d2d0aa364d" category="paragraph">Astra Control Center를 설치하고 사용하려면 반드시 충족해야 합니다<block ref="0a14e0fc52cf8d6c6274f9c6e777d67d" category="inline-link-rx"></block>.</block>
@@ -1765,7 +1763,6 @@ NetApp 이미지 레지스트리에서 Astra Control Provisioner와 같은 Astra
   <block id="6d55356ca8cb9b27cfa6e2bb46ebb089" category="example-title">샘플 반응:</block>
   <block id="3287973c50b09462bde24fe82b06c59b" category="list-text">Pod가 실행 중인지 확인합니다.</block>
   <block id="49442a4bf304a6a24081fc054a06ba5e" category="list-text">Astra Control Center 사용자 지정 리소스(CR) 편집:</block>
-  <block id="4bc1d1c42f12d420fb373e1a8d345a2d" category="list-text">Astra 버전 번호를 변경합니다 <block ref="bbdbf70444e48a34a4a7e7d708d85eec" prefix="(" category="inline-code"></block> 의 내부<block ref="b979c2934ac0b4ba3f08dabfdd1b2299" prefix=" " category="inline-code"></block>)를 업그레이드할 버전:</block>
   <block id="41ff704de5d4377c40831a45f37b2f9c" category="list-text">이미지 레지스트리 경로가 에서 이미지를 푸시한 레지스트리 경로와 일치하는지 확인합니다 <block ref="7fe0e1ddcc2917e6a216033278119235" category="inline-xref-macro-rx"></block>. 업데이트<block ref="990dc1a09e10c7b5378e6bc8a1956cb8" prefix=" " category="inline-code"></block> 의 내부<block ref="b979c2934ac0b4ba3f08dabfdd1b2299" prefix=" " category="inline-code"></block> 마지막 설치 이후 레지스트리가 변경된 경우</block>
   <block id="0721a4ab2e84ecf070923858d32930ec" category="list-text">에 다음을 추가합니다<block ref="c16ae51f09d668b952e5ab23072ad64e" prefix=" " category="inline-code"></block> 의 내부 구성<block ref="b979c2934ac0b4ba3f08dabfdd1b2299" prefix=" " category="inline-code"></block>:</block>
   <block id="0f04760e138c3f7be6f489f1347dbf8c" category="list-text">에 다음 행을 추가합니다<block ref="9848fd54a26db3cbb32026fac4aa182a" prefix=" " category="inline-code"></block> 의 내부<block ref="b979c2934ac0b4ba3f08dabfdd1b2299" prefix=" " category="inline-code"></block> Astra Control Center CR에서 다음을 수행합니다.</block>
@@ -2503,7 +2500,6 @@ Astra Control은 이제 NVMe/TCP를 통해 연결된 영구 볼륨의 지원을 
 참고: 사용하지 마십시오<block ref="dbd7790bcd23fde7607101ef6a633779" prefix=" " category="inline-code"></block> 또는<block ref="f8eae6750519389e078e1eb1bcb3d708" prefix=" " category="inline-code"></block> 를 입력합니다. 에서 사용하기 위해 이 FQDN을 복사합니다 <block ref="39c8566ec35b62823c898c5e38a4b78c" category="inline-xref-macro-rx"></block>.</block>
   <block id="a35d697fca562fcd8adcc6a07880b3d5" category="cell"><block ref="51c3153f8b9ad8f3a27b28d6c8f95aab" prefix="" category="inline-code"></block></block>
   <block id="16655bd6caa78814980ce90854a07356" category="example-title">&lt;code&gt;autoSupport&lt;/code&gt;</block>
-  <block id="7548d8cfdbba865da930704f30a7542f" category="paragraph">이 섹션에서 어떤 항목을 선택하는지에 따라 NetApp의 사전 지원 애플리케이션인 NetApp Active IQ에 참여할 것인지, 그리고 데이터를 보낼 위치를 결정할 수 있습니다. 인터넷 연결이 필요하며(포트 442) 모든 지원 데이터가 익명화됩니다.</block>
   <block id="ad8783089f828b927473fb61d51940ec" category="cell">사용</block>
   <block id="60d9e21a93c21f0d9ec8e72e12270054" category="cell"><block ref="774a4ec4adf9dd65264c77b3b87833b7" prefix="" category="inline-code"></block></block>
   <block id="24b6133a8f6f0866838539b9ca41cfa7" category="cell">둘 다 가능합니다<block ref="ff7af27948b380bff5d583359796d3c8" prefix=" " category="inline-code"></block> 또는<block ref="572d4e421e5e6b9bc11d815e8a027112" prefix=" " category="inline-code"></block> 필드를 선택해야 합니다</block>
@@ -3528,4 +3524,7 @@ Astra Trident는 가져오기 및 검색 프로세스의 일부로 자동으로 
   <block id="1fe917b01f9a3f87fa2d7d3b7643fac1" category="sidebar">FAQ 를 참조하십시오</block>
   <block id="424ceef1136fb58527f241d7cdf1c5e9" category="list-text">Astra 버전 번호를 변경합니다 <block ref="bbdbf70444e48a34a4a7e7d708d85eec" prefix="(" category="inline-code"></block> 의 내부<block ref="b979c2934ac0b4ba3f08dabfdd1b2299" prefix=" " category="inline-code"></block>)에서 시작합니다<block ref="e43c70c154432522a389a51dc9db6b94" prefix=" " category="inline-code"></block> 를 선택합니다<block ref="84976609aebb6439476255d5ef8280bb" prefix=" " category="inline-code"></block>:</block>
   <block id="7f8303559ee1d0bdcb1d09fd27feaa43" category="admonition">현재 릴리스 뒤에 있는 두 개 이상의 릴리스에서는 직접 업그레이드할 수 없습니다. 릴리스 버전의 전체 목록은 를 참조하십시오 <block ref="6828c83fc2e1f023c92b48e8acd1d196" category="inline-link-macro-rx"></block>.</block>
+  <block id="a9cf730f8ab04a5b52f1d19c74c1483c" category="paragraph">Astra Control Center는 AutoSupport 및 Active IQ Digital Advisor(Digital Advisor라고도 함) 에코시스템에 완벽하게 통합되어 사용자 및 NetApp 지원에 문제 해결 및 사용 정보를 제공합니다.</block>
+  <block id="d89b38e0f587f8fa359a431abd35bb40" category="paragraph">이 섹션에서 선택한 항목에 따라 NetApp의 사전 지원 응용 프로그램, 디지털 어드바이저 및 데이터 전송 위치가 결정됩니다. 인터넷 연결이 필요하며(포트 442) 모든 지원 데이터가 익명화됩니다.</block>
+  <block id="3cf9bc07c0ae31018d3336b8f32de6c8" category="list-text">Digital Advisor 사용</block>
 </blocks>
