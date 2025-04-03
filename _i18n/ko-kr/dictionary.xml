@@ -2426,7 +2426,6 @@ Astra Control은 이제 NVMe/TCP를 통해 연결된 영구 볼륨의 지원을 
   <block id="7c90d436f62a080a98e02874957865e0" category="inline-link-macro">수행할 수 있습니다</block>
   <block id="41bdd90cead20f2dddf0647e2f48fc13" category="list-text">* Cloud Volumes ONTAP 백엔드를 사용하여 퍼블릭 클라우드에 설치 *: 사용 <block ref="cdbba4f6294205e74dc04d0ee99d1d1f" category="inline-link-macro-rx"></block> AWS(Amazon Web Services), GCP(Google Cloud Platform) 또는 Cloud Volumes ONTAP 스토리지 백엔드가 있는 Microsoft Azure에 Astra Control Center를 설치하려면 다음을 수행합니다.</block>
   <block id="201e09e85ad81db8a19ef9f20c05d1a5" category="inline-link">이 비디오</block>
-  <block id="259f3be9b6c8eefb44e844c2b70333dc" category="paragraph">Astra Control Center 설치 프로세스 데모는 를 참조하십시오<block ref="cbbdec23221803dc148346abe5a297c0" category="inline-link-rx"></block>.</block>
   <block id="2b305f607904d67cd2da521366334e8c" category="inline-link-macro">설치를 시작하기 전에 Astra Control Center 구축을 위한 환경을 준비합니다</block>
   <block id="748a7a1711b184c4e02102a84264406d" category="list-text">* 환경 필수 조건 충족 *: <block ref="689b20f2e0a9cb0a12bc48475b3f81ee" category="inline-link-macro-rx"></block>.</block>
   <block id="f96c06e8efd6770cb5f76e8c3aa4238f" category="admonition">Astra Control Center를 세 번째 고장 도메인 또는 보조 사이트에 배포합니다. 앱 복제 및 원활한 재해 복구에 권장됩니다.</block>
@@ -3527,4 +3526,5 @@ Astra Trident는 가져오기 및 검색 프로세스의 일부로 자동으로 
   <block id="a9cf730f8ab04a5b52f1d19c74c1483c" category="paragraph">Astra Control Center는 AutoSupport 및 Active IQ Digital Advisor(Digital Advisor라고도 함) 에코시스템에 완벽하게 통합되어 사용자 및 NetApp 지원에 문제 해결 및 사용 정보를 제공합니다.</block>
   <block id="d89b38e0f587f8fa359a431abd35bb40" category="paragraph">이 섹션에서 선택한 항목에 따라 NetApp의 사전 지원 응용 프로그램, 디지털 어드바이저 및 데이터 전송 위치가 결정됩니다. 인터넷 연결이 필요하며(포트 442) 모든 지원 데이터가 익명화됩니다.</block>
   <block id="3cf9bc07c0ae31018d3336b8f32de6c8" category="list-text">Digital Advisor 사용</block>
+  <block id="285c7fb54a928cf8e9ca78a83740ce60" category="paragraph">Astra Control Center 설치 프로세스의 데모는 를 참조하십시오<block ref="d97427b76746d487a682c110ed41c817" category="inline-link-rx"></block>.</block>
 </blocks>
